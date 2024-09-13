@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-tender-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-tender-api
+  template:
+    metadata:
+      labels:
+        app: my-tender-api
+    spec:
+      containers:
+      - name: ZADANIE-6105
+        image: your-docker-repo/ZADANIE-6105:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SERVER_ADDRESS
+          value: "0.0.0.0:8080"
+        - name: POSTGRES_CONN
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: connectionString
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ZADANIE-6105-service
+spec:
+  selector:
+    app: ZADANIE-6105
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+  type: LoadBalancer

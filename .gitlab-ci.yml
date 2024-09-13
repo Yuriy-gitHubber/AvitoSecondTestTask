@@ -1,0 +1,14 @@
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  script:
+    - docker build -t <docker-registry>/ZADANIE-6105:latest .
+    - docker push <docker-registry>/ZADANIE-6105:latest
+
+deploy:
+  stage: deploy
+  script:
+    - kubectl apply -f deployment.yaml
